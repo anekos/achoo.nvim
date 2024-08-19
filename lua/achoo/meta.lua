@@ -27,7 +27,7 @@ function M.from_filename(filename)
   if base == 'name' then
     return M.named_session(first)
   elseif base == 'directory' then
-    return M.named_session(first)
+    return M.directory_session(first)
   end
 
   error('Unknown session type')
