@@ -21,7 +21,16 @@ function M.setup(_)
   })
 
   vim.api.nvim_create_user_command('AchooLoad', function(opts)
-    Cmd.load(opts.args)
+    if 0 < #opts.args then
+      Cmd.load(opts.args)
+    end
+
+    vim.ui.select(Cmd.complete_sessions(), { prompt = 'Select session' }, function(answer)
+      if answer == nil or answer == '' then
+        return
+      end
+      Cmd.load(answer)
+    end)
   end, {
     nargs = '*',
     complete = Cmd.complete_sessions,
