@@ -8,7 +8,7 @@ local function identity(x)
   return x
 end
 
-function make_session(session_type, key)
+local function make_session(session_type, key)
   return { type = session_type, key = key }
 end
 
