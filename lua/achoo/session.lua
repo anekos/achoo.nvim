@@ -19,6 +19,18 @@ function M.register(session_type, opts)
 
   M.registered[session_type] = opts
 
+  if opts.auto_key ~= nil then
+    opts.make_key = function(args, callback)
+      if args == nil then
+        opts.auto_key(function(key)
+          callback(key)
+        end)
+        return
+      end
+      error('Too many arguments')
+    end
+  end
+
   -- TODO assertion for type
 
   if opts.to_code == nil then
