@@ -23,8 +23,9 @@ function M.from_filename(filename)
     error('Invalid filename')
   end
 
-  local no_ext = Percent.decode(vim.fn.fnamemodify(filename, ':r'))
+  local no_ext = vim.fn.fnamemodify(filename, ':r')
   local base, first = unpack(vim.split(no_ext, '/'))
+  first = Percent.decode(first)
 
   if base == 'name' then
     return M.named_session(first)
@@ -64,6 +65,8 @@ function M.from_text(text)
 
   if base == 'name' then
     return M.named_session(something)
+  elseif base == 'directory' then
+    return M.directory_session(something)
   end
 
   error('Unknown session type')
