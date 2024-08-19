@@ -1,7 +1,7 @@
 local M = {}
 
 local Path = require('plenary.path')
-local Meta = require('achoo.meta')
+local Session = require('achoo.session')
 local Vim = require('achoo.lib.vim')
 local State = require('achoo.state')
 
@@ -9,49 +9,49 @@ local function get_base_directory()
   return Path:new(vim.fn.stdpath('data'), 'achoo', 'session')
 end
 
-local function make_filepath(meta)
+local function make_filepath(session)
   local dir = get_base_directory()
-  return Path:new(dir, Meta.to_filename(meta))
+  return Path:new(dir, Session.to_filename(session))
 end
 
-function M.save_session(meta, overwrite)
-  local session_file = make_filepath(meta)
+function M.save_session(session, overwrite)
+  local session_file = make_filepath(session)
 
   if not overwrite and session_file:exists() then
-    vim.notify('Session already exists: ' .. Meta.to_display(meta), 'error')
+    vim.notify('Session already exists: ' .. Session.to_display(session), 'error')
     return
   end
 
   session_file:parent():mkdir { parents = true }
   vim.cmd { cmd = 'mksession', args = { Vim.command_line_escape(session_file.filename) }, bang = true }
 
-  vim.notify('Session saved: ' .. Meta.to_display(meta), 'info')
-  State.last_session = meta
+  vim.notify('Session saved: ' .. Session.to_display(session), 'info')
+  State.last_session = session
 end
 
-function M.load_session(meta)
-  local session_file = make_filepath(meta)
+function M.load_session(session)
+  local session_file = make_filepath(session)
   if not session_file:exists() then
-    vim.notify('Session not found: ' .. Meta.to_display(meta), 'error')
+    vim.notify('Session not found: ' .. Session.to_display(session), 'error')
     return
   end
 
   vim.cmd { cmd = 'source', args = { Vim.command_line_escape(session_file.filename) } }
-  vim.notify('Session loaded: ' .. Meta.to_display(meta), 'info')
-  State.last_session = meta
+  vim.notify('Session loaded: ' .. Session.to_display(session), 'info')
+  State.last_session = session
 end
 
 function M.sessions()
   local dir = get_base_directory()
 
-  local meta_files = vim.fs.find(function(name)
+  local session_files = vim.fs.find(function(name)
     return name:match('.*%.vim$')
   end, { type = 'file', path = dir.filename, limit = 10 })
 
   local result = {}
-  for _, mf in ipairs(meta_files) do
+  for _, mf in ipairs(session_files) do
     local filename = Path:new(mf):make_relative(dir.filename)
-    table.insert(result, Meta.from_filename(filename))
+    table.insert(result, Session.from_filename(filename))
   end
 
   return result

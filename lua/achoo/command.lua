@@ -1,14 +1,17 @@
 local M = {}
 
 local Fs = require('achoo.fs')
-local Meta = require('achoo.meta')
+local Session = require('achoo.session')
 local State = require('achoo.state')
 
 function M.load(args)
   args = vim.trim(args)
+  if args == '' then
+    args = nil
+  end
 
-  if 0 < #args then
-    Fs.load_session(Meta.from_text(args))
+  if args ~= nil then
+    Fs.load_session(Session.from_code(args))
     return
   end
 
@@ -16,17 +19,17 @@ function M.load(args)
     if answer == nil or answer == '' then
       return
     end
-    Fs.load_session(Meta.from_text(answer))
+    Fs.load_session(Session.from_code(answer))
   end)
 end
 
 function M.save(args, overwrite)
   args = vim.trim(args)
 
-  local first, second = unpack(vim.split(args, ' ', { trimempty = true }))
+  local session_type, key = unpack(vim.split(args, ' ', { trimempty = true }))
 
-  if first == nil then
-    vim.ui.select(Meta.bases, { prompt = 'Session type' }, function(answer)
+  if session_type == nil then
+    vim.ui.select(Session.types(), { prompt = 'Session type' }, function(answer)
       if answer == nil or answer == '' then
         return
       end
@@ -35,31 +38,9 @@ function M.save(args, overwrite)
     return
   end
 
-  if first == 'name' then
-    if second == nil then
-      vim.ui.input({ prompt = 'Session name' }, function(answer)
-        if answer == nil or answer == '' then
-          return
-        end
-        Fs.save_session(Meta.named_session(answer), overwrite)
-      end)
-      return
-    end
-
-    Fs.save_session(Meta.named_session(second), overwrite)
-    return
-  end
-
-  if first == 'directory' then
-    if second == nil then
-      Fs.save_session(Meta.directory_session(vim.fn.getcwd()), overwrite)
-      return
-    end
-
-    error('Too many arguments')
-  end
-
-  error('Unknown session type')
+  Session.make(session_type, key, function (session)
+    Fs.save_session(session, overwrite)
+  end)
 end
 
 function M.set_auto_save(args)
@@ -77,14 +58,14 @@ end
 
 function M.complete_sessions()
   local result = {}
-  for _, meta in ipairs(Fs.sessions()) do
-    table.insert(result, Meta.to_text(meta))
+  for _, session in ipairs(Fs.sessions()) do
+    table.insert(result, Session.to_code(session))
   end
   return result
 end
 
-function M.complete_bases()
-  return Meta.bases
+function M.complete_types()
+  return Session.types()
 end
 
 return M

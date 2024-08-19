@@ -3,6 +3,14 @@ local M = {}
 local Cmd = require('achoo.command')
 local State = require('achoo.state')
 local Fs = require('achoo.fs')
+local Session = require('achoo.session')
+local Types = require('achoo.types')
+
+local function register_sources()
+  for session_type, definition in pairs(Types) do
+    Session.register(session_type, definition)
+  end
+end
 
 local function define_command()
   vim.api.nvim_create_user_command('AchooSave', function(opts)
@@ -10,7 +18,7 @@ local function define_command()
   end, {
     nargs = '*',
     bang = true,
-    complete = Cmd.complete_bases,
+    complete = Cmd.complete_types,
   })
 
   vim.api.nvim_create_user_command('AchooLoad', function(opts)
@@ -49,6 +57,7 @@ local function apply_config(opts)
 end
 
 function M.setup(opts)
+  register_sources()
   apply_config(opts)
   define_command()
   define_auto_commands()
