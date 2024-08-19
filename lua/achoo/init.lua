@@ -4,33 +4,15 @@ function M.setup(_)
   local Cmd = require('achoo.command')
 
   vim.api.nvim_create_user_command('AchooSave', function(opts)
-    if 0 < #opts.args then
-      Cmd.save(opts.args)
-      return
-    end
-
-    vim.ui.input({ prompt = 'Session name' }, function(answer)
-      if answer == nil or answer == '' then
-        return
-      end
-      Cmd.save('name:' .. answer)
-    end)
+    Cmd.save(opts.args, opts.bang)
   end, {
     nargs = '*',
-    complete = Cmd.complete_sessions,
+    bang = true,
+    complete = Cmd.complete_bases,
   })
 
   vim.api.nvim_create_user_command('AchooLoad', function(opts)
-    if 0 < #opts.args then
-      Cmd.load(opts.args)
-    end
-
-    vim.ui.select(Cmd.complete_sessions(), { prompt = 'Select session' }, function(answer)
-      if answer == nil or answer == '' then
-        return
-      end
-      Cmd.load(answer)
-    end)
+    Cmd.load(opts.args)
   end, {
     nargs = '*',
     complete = Cmd.complete_sessions,

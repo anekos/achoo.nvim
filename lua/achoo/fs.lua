@@ -2,6 +2,7 @@ local M = {}
 
 local Path = require('plenary.path')
 local Meta = require('achoo.meta')
+local Vim = require('achoo.lib.vim')
 
 local function get_base_directory()
   return Path:new(vim.fn.stdpath('data'), 'achoo', 'session')
@@ -21,7 +22,7 @@ function M.save_session(meta, overwrite)
   end
 
   session_file:parent():mkdir { parents = true }
-  vim.cmd { cmd = 'mksession', args = { session_file.filename }, bang = true }
+  vim.cmd { cmd = 'mksession', args = { Vim.command_line_escape(session_file.filename) }, bang = true }
 
   vim.notify('Session saved: ' .. session_file.filename, 'info')
 end
