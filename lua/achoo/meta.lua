@@ -53,6 +53,8 @@ function M.to_text(meta)
   error('Unknown session type')
 end
 
+M.to_display = M.to_text
+
 function M.from_text(text)
   local base, something = unpack(vim.split(text, ':', { trimempty = true }))
 

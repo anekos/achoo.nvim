@@ -17,25 +17,25 @@ function M.save_session(meta, overwrite)
   local session_file = make_filepath(meta)
 
   if not overwrite and session_file:exists() then
-    vim.notify('Session already exists', 'error')
+    vim.notify('Session already exists: ' .. Meta.to_display(meta), 'error')
     return
   end
 
   session_file:parent():mkdir { parents = true }
   vim.cmd { cmd = 'mksession', args = { Vim.command_line_escape(session_file.filename) }, bang = true }
 
-  vim.notify('Session saved: ' .. session_file.filename, 'info')
+  vim.notify('Session saved: ' .. Meta.to_display(meta), 'info')
 end
 
 function M.load_session(meta)
   local session_file = make_filepath(meta)
   if not session_file:exists() then
-    vim.notify('Session not found: ' .. session_file.filename, 'error')
+    vim.notify('Session not found: ' .. Meta.to_display(meta), 'error')
     return
   end
 
   vim.cmd { cmd = 'source', args = { session_file.filename } }
-  vim.notify('Session loaded: ' .. session_file.filename, 'info')
+  vim.notify('Session loaded: ' .. Meta.to_display(meta), 'info')
 end
 
 function M.sessions()
