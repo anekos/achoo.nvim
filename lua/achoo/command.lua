@@ -4,6 +4,8 @@ local Fs = require('achoo.fs')
 local Meta = require('achoo.meta')
 
 function M.load(args)
+  args = vim.trim(args)
+
   if 0 < #args then
     Fs.load_session(Meta.from_text(args))
     return
@@ -18,6 +20,8 @@ function M.load(args)
 end
 
 function M.save(args, overwrite)
+  args = vim.trim(args)
+
   local first, second = unpack(vim.split(args, ' '))
 
   if first == 'name' then
@@ -31,7 +35,7 @@ function M.save(args, overwrite)
       return
     end
 
-    Fs.save_session(Meta.from_text(second), overwrite)
+    Fs.save_session(Meta.named_session(second), overwrite)
     return
   end
 
