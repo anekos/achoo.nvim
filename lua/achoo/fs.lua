@@ -34,7 +34,7 @@ function M.load_session(meta)
     return
   end
 
-  vim.cmd { cmd = 'source', args = { session_file.filename } }
+  vim.cmd { cmd = 'source', args = { Vim.command_line_escape(session_file.filename) } }
   vim.notify('Session loaded: ' .. Meta.to_display(meta), 'info')
 end
 
