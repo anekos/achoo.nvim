@@ -4,6 +4,7 @@ local Fs = require('achoo.fs')
 local Session = require('achoo.session')
 local State = require('achoo.state')
 local Ui = require('achoo.ui')
+local Lua = require('achoo.lib.lua')
 
 function M.delete(args, force)
   args = vim.trim(args)
@@ -53,7 +54,7 @@ end
 function M.save(args, overwrite)
   args = vim.trim(args)
 
-  local session_type, key = unpack(vim.split(args, ' ', { trimempty = true }))
+  local session_type, key = unpack(Lua.split(args, ' ', 2))
 
   if session_type == nil then
     vim.ui.select(Session.types(), { prompt = 'Session type' }, function(answer)

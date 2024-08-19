@@ -1,6 +1,7 @@
 local M = {}
 
 local Percent = require('achoo.lib.percent')
+local Lua = require('achoo.lib.lua')
 
 M.registered = {}
 
@@ -62,7 +63,7 @@ function M.from_filename(filename)
   end
 
   local no_ext = vim.fn.fnamemodify(filename, ':r')
-  local session_type, key = unpack(vim.split(no_ext, '/'))
+  local session_type, key = unpack(Lua.split(no_ext, '/', 2))
   key = Percent.decode(key)
 
   if M.registered[session_type] == nil then
@@ -87,7 +88,7 @@ end
 M.to_display = M.to_code
 
 function M.from_code(text)
-  local session_type, key = unpack(vim.split(text, ':', { trimempty = true }))
+  local session_type, key = unpack(Lua.split(text, ':', 2))
 
   if key == nil or session_type == nil then
     error('Invalid session code')

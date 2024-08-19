@@ -1,6 +1,7 @@
 local M = {}
 
 local Git = require('achoo.lib.git')
+local Lua = require('achoo.lib.lua')
 
 M.name = {
   make_key = function(args, callback)
@@ -39,12 +40,12 @@ M.branch = {
   end,
 
   to_code = function(key)
-    local path, branch = unpack(vim.fn.split(key, '@'))
+    local path, branch = unpack(Lua.split(key, '@', 2))
     return vim.fn.fnamemodify(path, ':~') .. '@' .. branch
   end,
 
   from_code = function(code)
-    local path, branch = unpack(vim.fn.split(code, '@'))
+    local path, branch = unpack(Lua.split(code, '@', 2))
     return vim.fn.expand(path) .. '@' .. branch
   end,
 }
