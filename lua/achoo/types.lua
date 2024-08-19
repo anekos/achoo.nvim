@@ -33,6 +33,21 @@ M.directory = {
   end,
 }
 
+M.repositry = {
+  auto_key = function(callback)
+    local key = Git.repository_path()
+    callback(key)
+  end,
+
+  to_code = function(key)
+    return vim.fn.fnamemodify(key, ':~')
+  end,
+
+  from_code = function(code)
+    return vim.fn.expand(code)
+  end,
+}
+
 M.branch = {
   auto_key = function(callback)
     local key = Git.repository_path() .. '@' .. Git.current_branch()
