@@ -2,6 +2,7 @@ local M = {}
 
 local Fs = require('achoo.fs')
 local Meta = require('achoo.meta')
+local State = require('achoo.state')
 
 function M.load(args)
   args = vim.trim(args)
@@ -59,6 +60,19 @@ function M.save(args, overwrite)
   end
 
   error('Unknown session type')
+end
+
+function M.set_auto_save(args)
+  if args == '' then
+    State.auto_save = not State.auto_save
+  elseif args == 'on' then
+    State.auto_save = true
+  elseif args == 'off' then
+    State.auto_save = false
+  else
+    error('Invalid argument')
+  end
+  vim.notify('Auto save is ' .. (State.auto_save and 'enabled' or 'disabled'))
 end
 
 function M.complete_sessions()

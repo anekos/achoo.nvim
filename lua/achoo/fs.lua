@@ -3,6 +3,7 @@ local M = {}
 local Path = require('plenary.path')
 local Meta = require('achoo.meta')
 local Vim = require('achoo.lib.vim')
+local State = require('achoo.state')
 
 local function get_base_directory()
   return Path:new(vim.fn.stdpath('data'), 'achoo', 'session')
@@ -25,6 +26,7 @@ function M.save_session(meta, overwrite)
   vim.cmd { cmd = 'mksession', args = { Vim.command_line_escape(session_file.filename) }, bang = true }
 
   vim.notify('Session saved: ' .. Meta.to_display(meta), 'info')
+  State.last_session = meta
 end
 
 function M.load_session(meta)
@@ -36,6 +38,7 @@ function M.load_session(meta)
 
   vim.cmd { cmd = 'source', args = { Vim.command_line_escape(session_file.filename) } }
   vim.notify('Session loaded: ' .. Meta.to_display(meta), 'info')
+  State.last_session = meta
 end
 
 function M.sessions()
