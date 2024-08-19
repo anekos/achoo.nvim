@@ -70,10 +70,7 @@ function M.complete_sessions()
 end
 
 function M.complete_bases()
-  return {
-    'name',
-    'directory',
-  }
+  return Meta.bases
 end
 
 return M
