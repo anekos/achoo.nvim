@@ -10,6 +10,9 @@ function M.setup(_)
     end
 
     vim.ui.input({ prompt = 'Session name' }, function(answer)
+      if answer == nil or answer == '' then
+        return
+      end
       Cmd.save('name:' .. answer)
     end)
   end, {
