@@ -2,7 +2,7 @@ local M = {}
 
 local Percent = require('achoo.lib.percent')
 
-M.bases = { 'name', 'directory' }
+M.bases = { 'directory', 'name' }
 
 function M.named_session(name)
   return {
