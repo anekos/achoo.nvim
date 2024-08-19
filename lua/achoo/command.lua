@@ -15,7 +15,7 @@ function M.load(args)
     if answer == nil or answer == '' then
       return
     end
-    Fs.load_session(answer)
+    Fs.load_session(Meta.from_text(answer))
   end)
 end
 
