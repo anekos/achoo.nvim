@@ -41,6 +41,21 @@ function M.load_session(session)
   State.last_session = session
 end
 
+function M.delete_session(session)
+  local session_file = make_filepath(session)
+  if not session_file:exists() then
+    vim.notify('Session not found: ' .. Session.to_display(session), 'error')
+    return
+  end
+
+  vim.fn.delete(session_file.filename)
+
+  vim.notify('Session deleted: ' .. Session.to_display(session), 'info')
+  if State.last_session == session then
+    State.last_session = nil
+  end
+end
+
 function M.sessions()
   local dir = get_base_directory()
 

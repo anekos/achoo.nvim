@@ -3,6 +3,33 @@ local M = {}
 local Fs = require('achoo.fs')
 local Session = require('achoo.session')
 local State = require('achoo.state')
+local Ui = require('achoo.ui')
+
+function M.delete(args, force)
+  args = vim.trim(args)
+  if args == '' then
+    args = nil
+  end
+
+  if args ~= nil then
+    local session = Session.from_code(args)
+    if force then
+      Fs.delete_session(session)
+      return
+    end
+    Ui.confirm('Delete session: ' .. Session.to_display(session), function()
+      Fs.delete_session(session)
+    end)
+    return
+  end
+
+  vim.ui.select(M.complete_sessions(), { prompt = 'Select session' }, function(answer)
+    if answer == nil or answer == '' then
+      return
+    end
+    M.delete(answer, force)
+  end)
+end
 
 function M.load(args)
   args = vim.trim(args)
@@ -19,7 +46,7 @@ function M.load(args)
     if answer == nil or answer == '' then
       return
     end
-    Fs.load_session(Session.from_code(answer))
+    M.load(answer)
   end)
 end
 

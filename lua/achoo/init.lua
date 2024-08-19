@@ -36,6 +36,14 @@ local function define_command()
       return { 'on', 'off' }
     end,
   })
+
+  vim.api.nvim_create_user_command('AchooDelete', function(opts)
+    Cmd.delete(opts.args, opts.bang)
+  end, {
+    nargs = '*',
+    bang = true,
+    complete = Cmd.complete_sessions,
+  })
 end
 
 local function define_auto_commands()
