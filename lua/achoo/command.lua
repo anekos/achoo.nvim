@@ -22,7 +22,17 @@ end
 function M.save(args, overwrite)
   args = vim.trim(args)
 
-  local first, second = unpack(vim.split(args, ' '))
+  local first, second = unpack(vim.split(args, ' ', { trimempty = true }))
+
+  if first == nil then
+    vim.ui.select(Meta.bases, { prompt = 'Session type' }, function(answer)
+      if answer == nil or answer == '' then
+        return
+      end
+      M.save(answer, overwrite)
+    end)
+    return
+  end
 
   if first == 'name' then
     if second == nil then
