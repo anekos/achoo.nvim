@@ -89,6 +89,7 @@ function M.complete_sessions()
   for _, session in ipairs(Fs.sessions()) do
     table.insert(result, Session.to_code(session))
   end
+  table.sort(result)
   return result
 end
 
