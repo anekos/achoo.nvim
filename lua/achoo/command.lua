@@ -66,9 +66,18 @@ function M.save(args, overwrite)
     return
   end
 
-  Session.make(session_type, key, function (session)
+  Session.make(session_type, key, function(session)
     Fs.save_session(session, overwrite)
   end)
+end
+
+function M.update()
+  if State.last_session == nil then
+    vim.notify('No session loaded')
+    return
+  end
+
+  Fs.save_session(State.last_session, true)
 end
 
 function M.set_auto_save(args)

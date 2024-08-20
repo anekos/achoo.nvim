@@ -21,6 +21,12 @@ local function define_command()
     complete = Cmd.complete_types,
   })
 
+  vim.api.nvim_create_user_command('AchooUpdate', function()
+    Cmd.update()
+  end, {
+    nargs = 0,
+  })
+
   vim.api.nvim_create_user_command('AchooLoad', function(opts)
     Cmd.load(opts.args)
   end, {
