@@ -56,7 +56,7 @@ local function define_auto_commands()
   vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
     pattern = { '*' },
     callback = function()
-      if State.last_session == nil then
+      if State.last_session == nil or not State.auto_save then
         return
       end
       Fs.save_session(State.last_session, true)
