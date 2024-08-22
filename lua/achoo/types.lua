@@ -2,6 +2,7 @@ local M = {}
 
 local Git = require('achoo.lib.git')
 local Lua = require('achoo.lib.lua')
+local Path = require('achoo.lib.path')
 
 M.name = {
   make_key = function(args, callback)
@@ -62,6 +63,28 @@ M.branch = {
   from_code = function(code)
     local path, branch = unpack(Lua.split(code, '@', 2))
     return vim.fn.expand(path) .. '@' .. branch
+  end,
+}
+
+M.monorepo = {
+  auto_key = function(callback)
+    local root = Git.repository_path()
+    local path = Path.relative_path(vim.fn.getcwd(), root)
+    local branch = Git.current_branch()
+    local key = root .. '#' .. path .. '@' .. branch
+    callback(key)
+  end,
+
+  to_code = function(key)
+    local repo, branch = unpack(Lua.split(key, '@', 2))
+    local root, path = unpack(Lua.split(repo, '#', 2))
+    return vim.fn.fnamemodify(root, ':~') .. '#' .. path .. '@' .. branch
+  end,
+
+  from_code = function(code)
+    local repo, branch = unpack(Lua.split(code, '@', 2))
+    local root, path = unpack(Lua.split(repo, '#', 2))
+    return vim.fn.expand(root) .. '#' .. path .. '@' .. branch
   end,
 }
 
