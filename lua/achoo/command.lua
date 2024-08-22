@@ -32,7 +32,7 @@ function M.delete(args, force)
   end)
 end
 
-function M.load(args)
+function M.unsafe_load(args)
   args = vim.trim(args)
   if args == '' then
     args = nil
@@ -47,8 +47,18 @@ function M.load(args)
     if answer == nil or answer == '' then
       return
     end
-    M.load(answer)
+    M.unsafe_load(answer)
   end)
+end
+
+function M.load(args)
+  local ok, msg = pcall(M.unsafe_load, args)
+  if not ok and State.auto_save then
+    msg = vim.split(msg, '\n')
+    table.insert(msg, 1, 'Failed to load session, auto save is enabled.')
+    vim.notify(msg)
+    State.auto_save = false
+  end
 end
 
 function M.save(args, overwrite)
