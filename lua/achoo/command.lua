@@ -76,7 +76,7 @@ function M.save(args, overwrite)
     return
   end
 
-  Session.make(session_type, key, function(session)
+  Session.make_async(session_type, key, function(session)
     Fs.save_session(session, overwrite)
   end)
 end

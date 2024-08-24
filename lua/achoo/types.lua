@@ -5,24 +5,19 @@ local Lua = require('achoo.lib.lua')
 local Path = require('achoo.lib.path')
 
 M.name = {
-  make_key = function(args, callback)
-    if args == nil then
-      vim.ui.input({ prompt = 'Session name' }, function(answer)
-        if answer == nil or answer == '' then
-          return
-        end
-        callback(answer)
-      end)
-      return
-    end
-
-    callback(args)
+  make_key = function(callback)
+    vim.ui.input({ prompt = 'Session name' }, function(answer)
+      if answer == nil or answer == '' then
+        return
+      end
+      callback(answer)
+    end)
   end,
 }
 
 M.directory = {
-  auto_key = function(callback)
-    callback(vim.fn.getcwd())
+  auto_key = function()
+    return vim.fn.getcwd()
   end,
 
   to_code = function(key)
@@ -35,9 +30,8 @@ M.directory = {
 }
 
 M.repositry = {
-  auto_key = function(callback)
-    local key = Git.repository_path()
-    callback(key)
+  auto_key = function()
+    return Git.repository_path()
   end,
 
   to_code = function(key)
@@ -50,9 +44,9 @@ M.repositry = {
 }
 
 M.branch = {
-  auto_key = function(callback)
+  auto_key = function()
     local key = Git.repository_path() .. '@' .. Git.current_branch()
-    callback(key)
+    return key
   end,
 
   to_code = function(key)
@@ -67,12 +61,12 @@ M.branch = {
 }
 
 M.monorepo = {
-  auto_key = function(callback)
+  auto_key = function()
     local root = Git.repository_path()
     local path = Path.relative_path(vim.fn.getcwd(), root)
     local branch = Git.current_branch()
     local key = root .. '#' .. path .. '@' .. branch
-    callback(key)
+    return key
   end,
 
   to_code = function(key)

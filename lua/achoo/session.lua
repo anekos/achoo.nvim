@@ -20,19 +20,16 @@ function M.register(session_type, opts)
 
   M.registered[session_type] = opts
 
-  if opts.auto_key ~= nil then
-    opts.make_key = function(args, callback)
-      if args == nil then
-        opts.auto_key(function(key)
-          callback(key)
-        end)
-        return
-      end
-      error('Too many arguments')
-    end
+  -- TODO assertion for type
+  if not opts.make_key and not opts.auto_key then
+    error('Not implemented: make_key or auto_key')
   end
 
-  -- TODO assertion for type
+  if not opts.make_key then
+    opts.make_key = function(args, callback)
+      callback(opts.make_key(args))
+    end
+  end
 
   if opts.to_code == nil then
     opts.to_code = identity
@@ -42,19 +39,41 @@ function M.register(session_type, opts)
   end
 end
 
-function M.make(session_type, key, callback)
-  if M.registered[session_type] == nil then
+function M.make(session_type, key)
+  local st = M.registered[session_type]
+
+  if st == nil then
     error('Unknown session type: ' .. session_type)
   end
 
-  if key == nil then
-    M.registered[session_type].make_key(nil, function(k)
-      callback(make_session(session_type, k))
-    end)
+  if key then
+    return make_session(session_type, key)
+  end
+
+  local auto_key = st.auto_key
+
+  if not auto_key then
+    return nil
+  end
+
+  return make_session(session_type, auto_key())
+end
+
+function M.make_async(session_type, key, callback)
+  local st = M.registered[session_type]
+
+  if st == nil then
+    error('Unknown session type: ' .. session_type)
+  end
+
+  if key then
+    callback(make_session(session_type, key))
     return
   end
 
-  callback(make_session(session_type, key))
+  st.make_key(nil, function(k)
+    callback(make_session(session_type, k))
+  end)
 end
 
 function M.from_filename(filename)
