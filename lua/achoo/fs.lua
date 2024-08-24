@@ -61,7 +61,7 @@ function M.sessions()
 
   local session_files = vim.fs.find(function(name)
     return name:match('.*%.vim$')
-  end, { type = 'file', path = dir.filename, limit = 10 })
+  end, { type = 'file', path = dir.filename, limit = math.huge })
 
   local result = {}
   for _, mf in ipairs(session_files) do
