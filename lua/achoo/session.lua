@@ -26,8 +26,8 @@ function M.register(session_type, opts)
   end
 
   if not opts.make_key then
-    opts.make_key = function(args, callback)
-      callback(opts.make_key(args))
+    opts.make_key = function(callback)
+      callback(opts.auto_key())
     end
   end
 
@@ -71,7 +71,7 @@ function M.make_async(session_type, key, callback)
     return
   end
 
-  st.make_key(nil, function(k)
+  st.make_key(function(k)
     callback(make_session(session_type, k))
   end)
 end
