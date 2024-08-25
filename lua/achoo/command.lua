@@ -55,7 +55,7 @@ function M.load(args)
   local ok, msg = pcall(M.unsafe_load, args)
   if not ok and State.auto_save then
     msg = vim.split(msg, '\n')
-    table.insert(msg, 1, 'Failed to load session, auto save is enabled.')
+    table.insert(msg, 1, 'Failed to load session, auto save is disabled.')
     vim.notify(msg)
     State.auto_save = false
   end
