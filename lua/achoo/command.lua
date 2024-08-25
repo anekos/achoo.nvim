@@ -16,23 +16,23 @@ function M.delete(args, force)
 
   if args ~= nil then
     local session = Session.from_code(args)
+
     if force then
       Fs.delete_session(session)
       return
     end
+
     Ui.confirm('Delete session: ' .. Session.to_display(session), function()
       Fs.delete_session(session)
     end)
-    return
   end
 
   vim.ui.select(Fs.sessions(), PromptOptions, function(session)
-    if session == nil then
-      return
+    if session then
+      Ui.confirm('Delete session: ' .. Session.to_display(session), function()
+        Fs.delete_session(session)
+      end)
     end
-    Ui.confirm('Delete session: ' .. Session.to_display(session), function()
-      Fs.delete_session(session)
-    end)
   end)
 end
 
@@ -71,11 +71,11 @@ function M.save(args, overwrite)
 
   if session_type == nil then
     vim.ui.select(Session.types(), { prompt = 'Session type' }, function(answer)
-      if answer == nil or answer == '' then
-        return
+      if answer then
+        M.save(answer, overwrite)
       end
-      M.save(answer, overwrite)
     end)
+
     return
   end
 
@@ -87,6 +87,7 @@ end
 function M.update()
   if State.last_session == nil then
     vim.notify('No session loaded')
+
     return
   end
 
