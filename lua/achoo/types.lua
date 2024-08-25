@@ -58,6 +58,11 @@ M.branch = {
     local path, branch = unpack(Lua.split(code, '@', 2))
     return vim.fn.expand(path) .. '@' .. branch
   end,
+
+  to_display = function(key)
+    local path, branch = unpack(Lua.split(key, '@', 2))
+    return vim.fn.fnamemodify(path, ':~') .. ' @' .. branch
+  end,
 }
 
 M.monorepo = {
@@ -80,6 +85,13 @@ M.monorepo = {
     local root, path = unpack(Lua.split(repo, '#', 2))
     return vim.fn.expand(root) .. '#' .. path .. '@' .. branch
   end,
+
+  to_display = function(key)
+    local repo, branch = unpack(Lua.split(key, '@', 2))
+    local root, path = unpack(Lua.split(repo, '#', 2))
+    return vim.fn.fnamemodify(root, ':~') .. ' #' .. path .. ' @' .. branch
+  end,
+
 }
 
 return M

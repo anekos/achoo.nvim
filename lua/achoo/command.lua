@@ -6,6 +6,8 @@ local State = require('achoo.state')
 local Ui = require('achoo.ui')
 local Lua = require('achoo.lib.lua')
 
+PromptOptions = { prompt = 'Select session', format_item = Session.to_display }
+
 function M.delete(args, force)
   args = vim.trim(args)
   if args == '' then
@@ -24,11 +26,13 @@ function M.delete(args, force)
     return
   end
 
-  vim.ui.select(M.complete_sessions(), { prompt = 'Select session' }, function(answer)
-    if answer == nil or answer == '' then
+  vim.ui.select(Fs.sessions(), PromptOptions, function(session)
+    if session == nil then
       return
     end
-    M.delete(answer, force)
+    Ui.confirm('Delete session: ' .. Session.to_display(session), function()
+      Fs.delete_session(session)
+    end)
   end)
 end
 
@@ -43,11 +47,10 @@ function M.unsafe_load(args)
     return
   end
 
-  vim.ui.select(M.complete_sessions(), { prompt = 'Select session' }, function(answer)
-    if answer == nil or answer == '' then
-      return
+  vim.ui.select(Fs.sessions(), PromptOptions, function(session)
+    if session then
+      Fs.load_session(session)
     end
-    M.unsafe_load(answer)
   end)
 end
 

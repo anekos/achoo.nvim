@@ -37,6 +37,10 @@ function M.register(session_type, opts)
   if opts.from_code == nil then
     opts.from_code = identity
   end
+
+  if not opts.to_display then
+    opts.to_display = opts.to_code
+  end
 end
 
 function M.make(session_type, key)
@@ -104,7 +108,13 @@ function M.to_code(session)
   return session.type .. ':' .. M.registered[session.type].to_code(session.key)
 end
 
-M.to_display = M.to_code
+function M.to_display(session)
+  if M.registered[session.type] == nil then
+    error('Unknown session type: ' .. session.type)
+  end
+
+  return session.type .. ': ' .. M.registered[session.type].to_display(session.key)
+end
 
 function M.from_code(text)
   local session_type, key = unpack(Lua.split(text, ':', 2))
