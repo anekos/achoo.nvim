@@ -55,6 +55,16 @@ function M.split(s, separator, limit)
   return result
 end
 
+function M.map(f)
+  return function(t)
+    local result = {}
+    for _, v in ipairs(t) do
+      table.insert(result, f(v))
+    end
+    return result
+  end
+end
+
 -- print(vim.inspect(M.split('one,two,three,four,five', ',', 3)))
 -- print(vim.inspect(M.split('one,two,three', ',', 3)))
 -- print(vim.inspect(M.split('one,two,', ',', 2)))

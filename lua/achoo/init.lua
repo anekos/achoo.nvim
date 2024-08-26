@@ -15,11 +15,10 @@ end
 
 local function define_command()
   vim.api.nvim_create_user_command('AchooSave', function(opts)
-    Cmd.save(opts.args, opts.bang)
+    Cmd.save(opts.bang)
   end, {
-    nargs = '*',
+    nargs = 0,
     bang = true,
-    complete = Cmd.complete_types,
   })
 
   vim.api.nvim_create_user_command('AchooUpdate', function()
@@ -28,11 +27,10 @@ local function define_command()
     nargs = 0,
   })
 
-  vim.api.nvim_create_user_command('AchooLoad', function(opts)
-    Cmd.load(opts.args)
+  vim.api.nvim_create_user_command('AchooLoad', function(_)
+    Cmd.load()
   end, {
-    nargs = '*',
-    complete = Cmd.complete_sessions,
+    nargs = 0,
   })
 
   vim.api.nvim_create_user_command('AchooAutoSave', function(opts)
@@ -45,11 +43,10 @@ local function define_command()
   })
 
   vim.api.nvim_create_user_command('AchooDelete', function(opts)
-    Cmd.delete(opts.args, opts.bang)
+    Cmd.delete(opts.bang)
   end, {
-    nargs = '*',
+    nargs = 0,
     bang = true,
-    complete = Cmd.complete_sessions,
   })
 end
 

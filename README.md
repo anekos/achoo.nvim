@@ -37,12 +37,10 @@ To install Achoo.nvim, use your preferred Neovim plugin manager. For example, us
 
 ### Commands
 
-- `:AchooSave [session_type] [key]`: Save the current session. Use `!` to overwrite if the session already exists.
-- `:AchooLoad [session_code]`: Load a session by its code.
-- `:AchooDelete [session_code]`: Delete a session by its code. Use `!` to force deletion without confirmation.
+- `:AchooSave[!] [session_type]`: Save the current session. Use `!` to overwrite if the session already exists.
+- `:AchooLoad`: Load a session by its code.
+- `:AchooDelete`: Delete a session by its code. Use `!` to force deletion without confirmation.
 - `:AchooAutoSave [on|off]`: Toggle/Set auto-save functionality.
-
-If arguments (session_type/session_code/key) are omitted, a selector is displayed.
 
 ### Command Completion
 
