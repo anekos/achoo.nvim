@@ -49,6 +49,17 @@ If arguments (session_type/session_code/key) are omitted, a selector is displaye
 - **Session Types**: When saving a session, you can complete the session type using available options.
 - **Session Codes**: When loading or deleting a session, you can complete the session code from existing sessions.
 
+### Configration
+
+The default values.
+
+```
+{
+    auto_save = true,
+    confirm_on_leave = true,
+}
+```
+
 ## Contributing
 
 Contributions are welcome! Please submit a pull request or open an issue to discuss any changes.
