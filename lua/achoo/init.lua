@@ -60,17 +60,26 @@ local function define_auto_commands()
       if State.last_session == nil or not State.auto_save then
         return
       end
-      Ui.confirm('Save last session?', function()
+      if State.confirm_on_leave then
+        Ui.confirm('Save last session?', function()
+          Fs.save_session(State.last_session, true)
+        end)
+      else
         Fs.save_session(State.last_session, true)
-      end)
+      end
     end,
   })
 end
 
 local function apply_config(opts)
-  if opts.auto_save ~= nil then
-    State.auto_save = opts.auto_save
+  local function apply(name)
+    if opts[name] == nil then
+      State[name] = opts[name]
+    end
   end
+
+  apply('auto_save')
+  apply('confirm_on_leave')
 end
 
 function M.setup(opts)
