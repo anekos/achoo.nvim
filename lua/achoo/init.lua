@@ -73,7 +73,7 @@ end
 
 local function apply_config(opts)
   local function apply(name)
-    if opts[name] == nil then
+    if opts[name] ~= nil then
       State[name] = opts[name]
     end
   end
