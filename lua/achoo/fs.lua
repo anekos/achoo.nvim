@@ -14,6 +14,11 @@ local function make_filepath(session)
   return Path:new(dir, Session.to_filename(session))
 end
 
+function M.session_exists(session)
+  local session_file = make_filepath(session)
+  return vim.fn.filereadable(session_file.filename) == 1
+end
+
 function M.save_session(session, overwrite)
   local session_file = make_filepath(session)
 
