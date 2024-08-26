@@ -5,6 +5,7 @@ local State = require('achoo.state')
 local Fs = require('achoo.fs')
 local Session = require('achoo.session')
 local Types = require('achoo.types')
+local Ui = require('achoo.ui')
 
 local function register_sources()
   for session_type, definition in pairs(Types) do
@@ -59,7 +60,9 @@ local function define_auto_commands()
       if State.last_session == nil or not State.auto_save then
         return
       end
-      Fs.save_session(State.last_session, true)
+      Ui.confirm('Save last session?', function()
+        Fs.save_session(State.last_session, true)
+      end)
     end,
   })
 end
