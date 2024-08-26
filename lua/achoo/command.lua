@@ -65,6 +65,16 @@ function M.load(args)
 end
 
 function M.save(args, overwrite)
+  local function do_save(session)
+    if overwrite or not Fs.session_exists(session) then
+      Fs.save_session(session, overwrite)
+    else
+      Ui.confirm('Session already exists, overwrite?', function()
+        Fs.save_session(session, true)
+      end)
+    end
+  end
+
   args = vim.trim(args)
 
   local session_type, key = unpack(Lua.split(args, ' ', 2))
@@ -80,7 +90,9 @@ function M.save(args, overwrite)
   end
 
   Session.make_async(session_type, key, function(session)
-    Fs.save_session(session, overwrite)
+    if session then
+      do_save(session)
+    end
   end)
 end
 
