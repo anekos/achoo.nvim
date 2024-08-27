@@ -17,4 +17,8 @@ function M.relative_path(target, base)
   end
 end
 
+function M.shrink(path)
+  return vim.fn.fnamemodify(path, ':~')
+end
+
 return M

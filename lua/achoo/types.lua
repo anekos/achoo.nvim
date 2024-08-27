@@ -20,9 +20,7 @@ M.directory = {
     return vim.fn.getcwd()
   end,
 
-  to_display = function(path)
-    return vim.fn.fnamemodify(path, ':~')
-  end,
+  to_display = Path.shrink,
 }
 
 M.repositry = {
@@ -30,9 +28,7 @@ M.repositry = {
     return { Git.repository_path() }
   end,
 
-  to_display = function(path)
-    return vim.fn.fnamemodify(path, ':~')
-  end,
+  to_display = Path.shrink,
 }
 
 M.branch = {
@@ -40,8 +36,8 @@ M.branch = {
     return { Git.repository_path(), Git.current_branch() }
   end,
 
-  to_display = function(path, branch)
-    return vim.fn.fnamemodify(path, ':~') .. State.icon.branch .. branch
+  to_display = function(repo, branch)
+    return Path.shrink(repo) .. State.icon.branch .. branch
   end,
 }
 
@@ -54,7 +50,7 @@ M.monorepo = {
   end,
 
   to_display = function(repo, path, branch)
-    return vim.fn.fnamemodify(repo, ':~') .. State.icon.path .. path .. State.icon.branch .. branch
+    return Path.shrink(repo) .. State.icon.path .. path .. State.icon.branch .. branch
   end,
 }
 
