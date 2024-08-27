@@ -1,7 +1,7 @@
 local M = {}
 
 function M.encode(s)
-  local result = s:gsub('[^%w%-._~]', function(char)
+  local result = s:gsub('[^%w%-_~]', function(char)
     return string.format('%%%02X', string.byte(char))
   end)
   return result
