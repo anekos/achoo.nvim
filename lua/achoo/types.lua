@@ -19,11 +19,19 @@ M.directory = {
   auto_keys = function()
     return vim.fn.getcwd()
   end,
+
+  to_display = function(path)
+    return vim.fn.fnamemodify(path, ':~')
+  end,
 }
 
 M.repositry = {
   auto_keys = function()
     return { Git.repository_path() }
+  end,
+
+  to_display = function(path)
+    return vim.fn.fnamemodify(path, ':~')
   end,
 }
 
