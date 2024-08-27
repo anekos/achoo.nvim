@@ -2,6 +2,7 @@ local M = {}
 
 local Git = require('achoo.lib.git')
 local Path = require('achoo.lib.path')
+local State = require('achoo.state')
 
 M.name = {
   make_keys = function(callback)
@@ -32,7 +33,7 @@ M.branch = {
   end,
 
   to_display = function(path, branch)
-    return vim.fn.fnamemodify(path, ':~') .. ' @' .. branch
+    return vim.fn.fnamemodify(path, ':~') .. State.icon.branch .. branch
   end,
 }
 
@@ -45,7 +46,7 @@ M.monorepo = {
   end,
 
   to_display = function(repo, path, branch)
-    return vim.fn.fnamemodify(repo, ':~') .. '  #' .. path .. '  @' .. branch
+    return vim.fn.fnamemodify(repo, ':~') .. State.icon.path .. path .. State.icon.branch .. branch
   end,
 }
 

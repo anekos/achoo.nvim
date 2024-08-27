@@ -77,6 +77,7 @@ local function apply_config(opts)
 
   apply('auto_save')
   apply('confirm_on_leave')
+  apply('icon')
 end
 
 function M.setup(opts)
