@@ -17,7 +17,7 @@ M.name = {
 
 M.directory = {
   auto_keys = function()
-    return vim.fn.getcwd()
+    return { vim.fn.getcwd() }
   end,
 
   to_display = Path.shrink,
