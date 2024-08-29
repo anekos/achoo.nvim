@@ -29,7 +29,7 @@ end
 function M.checkout(branch, repo)
   local ok, _ = git([[ checkout ]] .. branch, repo)
   if not ok then
-    error('!!Failed to checkout branch: ' .. branch)
+    error('Failed to checkout branch: ' .. branch)
   end
 end
 
