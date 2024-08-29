@@ -9,6 +9,16 @@ local function make_session(session_type, keys)
   return { type = session_type, keys = keys }
 end
 
+local function get_type(session_type)
+  local st = M.registered[session_type]
+
+  if st == nil then
+    error('Unknown session type: ' .. session_type)
+  end
+
+  return st
+end
+
 function M.register(session_type, opts)
   if M.registered[session_type] ~= nil then
     error('Session type already registered: ' .. session_type)
@@ -36,11 +46,7 @@ function M.register(session_type, opts)
 end
 
 function M.make(session_type, keys)
-  local st = M.registered[session_type]
-
-  if st == nil then
-    error('Unknown session type: ' .. session_type)
-  end
+  local st = get_type(session_type)
 
   if keys then
     return make_session(session_type, keys)
@@ -56,11 +62,7 @@ function M.make(session_type, keys)
 end
 
 function M.make_async(session_type, callback)
-  local st = M.registered[session_type]
-
-  if st == nil then
-    error('Unknown session type: ' .. session_type)
-  end
+  local st = get_type(session_type)
 
   st.make_keys(function(keys)
     callback(make_session(session_type, keys))
@@ -83,16 +85,21 @@ function M.from_filename(filename)
   return make_session(session_type, keys)
 end
 
+function M.reflect(session)
+  local st = get_type(session.type)
+  local reflect = st.reflect
+  if reflect then
+    reflect(unpack(session.keys))
+  end
+end
+
 function M.to_filename(session)
   return session.type .. '/' .. vim.fn.join(Lua.map(Percent.encode)(session.keys), '/') .. '.vim'
 end
 
 function M.to_display(session)
-  if M.registered[session.type] == nil then
-    error('Unknown session type: ' .. session.type)
-  end
-
-  return session.type .. ': ' .. M.registered[session.type].to_display(unpack(session.keys))
+  local st = get_type(session.type)
+  return session.type .. ': ' .. st.to_display(unpack(session.keys))
 end
 
 function M.types()

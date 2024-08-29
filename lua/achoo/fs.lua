@@ -41,6 +41,8 @@ function M.load_session(session)
     return
   end
 
+  Session.reflect(session)
+
   vim.cmd { cmd = 'source', args = { Vim.command_line_escape(session_file.filename) } }
   vim.notify('Session loaded: ' .. Session.to_display(session), 'info')
   State.last_session = session

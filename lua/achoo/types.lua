@@ -39,6 +39,11 @@ M.branch = {
   to_display = function(repo, branch)
     return Path.shrink(repo) .. State.icon.branch .. branch
   end,
+
+  reflect = function(repo, branch)
+    Git.checkout(branch, repo)
+    vim.notify('Checked out branch: ' .. branch)
+  end,
 }
 
 M.monorepo = {
@@ -47,6 +52,10 @@ M.monorepo = {
     local path = Path.relative_path(vim.fn.getcwd(), repo)
     local branch = Git.current_branch()
     return { repo, path, branch }
+  end,
+
+  reflect = function(repo, _, branch)
+    M.branch.reflect(repo, branch)
   end,
 
   to_display = function(repo, path, branch)
