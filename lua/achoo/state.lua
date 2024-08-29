@@ -6,5 +6,6 @@ M.last_session = nil
 M.auto_save = true
 M.confirm_on_leave = true
 M.icon = Icon.predefined.ascii
+M.postprocess = false
 
 return M

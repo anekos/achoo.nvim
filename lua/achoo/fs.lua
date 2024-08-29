@@ -4,6 +4,8 @@ local Path = require('plenary.path')
 local Session = require('achoo.session')
 local Vim = require('achoo.lib.vim')
 local State = require('achoo.state')
+local Validator = require('achoo.validator')
+local Postprocess = require('achoo.postprocess')
 
 local function get_base_directory()
   return Path:new(vim.fn.stdpath('data'), 'achoo', 'session')
@@ -29,6 +31,11 @@ function M.save_session(session, overwrite)
 
   session_file:parent():mkdir { parents = true }
   vim.cmd { cmd = 'mksession', args = { Vim.command_line_escape(session_file.filename) }, bang = true }
+
+  if State.postprocess then
+    local validator = Validator.make_validator()
+    Postprocess.process_file(session_file.filename, validator)
+  end
 
   vim.notify('Session saved: ' .. Session.to_display(session), 'info')
   State.last_session = session
