@@ -59,10 +59,10 @@ local function define_auto_commands()
       end
       if State.confirm_on_leave then
         Ui.confirm('Save last session?', function()
-          Fs.save_session(State.last_session, true)
+          Fs.save_session(State.last_session, true, true)
         end)
       else
-        Fs.save_session(State.last_session, true)
+        Fs.save_session(State.last_session, true, true)
       end
     end,
   })
@@ -78,6 +78,7 @@ local function apply_config(opts)
   apply('auto_save')
   apply('confirm_on_leave')
   apply('icon')
+  apply('preprocess')
 end
 
 function M.setup(opts)

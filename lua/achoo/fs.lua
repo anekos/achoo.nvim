@@ -4,6 +4,8 @@ local Path = require('plenary.path')
 local Session = require('achoo.session')
 local Vim = require('achoo.lib.vim')
 local State = require('achoo.state')
+local Preprocess = require('achoo.preprocess')
+local Validator = require('achoo.validator')
 
 local function get_base_directory()
   return Path:new(vim.fn.stdpath('data'), 'achoo', 'session')
@@ -19,12 +21,17 @@ function M.session_exists(session)
   return vim.fn.filereadable(session_file.filename) == 1
 end
 
-function M.save_session(session, overwrite)
+function M.save_session(session, overwrite, on_leave)
   local session_file = make_filepath(session)
 
   if not overwrite and session_file:exists() then
     vim.notify('Session already exists: ' .. Session.to_display(session), 'error')
     return
+  end
+
+  if State.preprocess and on_leave then
+    local validator = Validator.make_validator()
+    Preprocess.preprocess(validator)
   end
 
   session_file:parent():mkdir { parents = true }
