@@ -1,6 +1,6 @@
 local M = {}
 
-local Percent = require('achoo.lib.percent')
+local Plus = require('achoo.lib.plus')
 local Lua = require('achoo.lib.lua')
 
 M.registered = {}
@@ -76,7 +76,7 @@ function M.from_filename(filename)
 
   local no_ext = vim.fn.fnamemodify(filename, ':r')
   local session_type, keys = unpack(Lua.split(no_ext, '/', 2))
-  keys = Lua.map(Percent.decode)(vim.split(keys, '/'))
+  keys = Lua.map(Plus.decode)(vim.split(keys, '/'))
 
   if M.registered[session_type] == nil then
     error('Unknown session type: ' .. session_type)
@@ -94,7 +94,7 @@ function M.reflect(session)
 end
 
 function M.to_filename(session)
-  return session.type .. '/' .. vim.fn.join(Lua.map(Percent.encode)(session.keys), '/') .. '.vim'
+  return session.type .. '/' .. vim.fn.join(Lua.map(Plus.encode)(session.keys), '/') .. '.vim'
 end
 
 function M.to_display(session)
