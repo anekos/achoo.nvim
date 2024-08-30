@@ -1,11 +1,11 @@
-local M = {}
-
 local Cmd = require('achoo.command')
-local State = require('achoo.state')
 local Fs = require('achoo.fs')
 local Session = require('achoo.session')
+local State = require('achoo.state')
 local Types = require('achoo.types')
 local Ui = require('achoo.ui')
+
+local M = {}
 
 local function register_sources()
   for session_type, definition in pairs(Types) do

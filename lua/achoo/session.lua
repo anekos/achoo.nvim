@@ -1,7 +1,7 @@
-local M = {}
-
-local Plus = require('achoo.lib.plus')
 local Lua = require('achoo.lib.lua')
+local Plus = require('achoo.lib.plus')
+
+local M = {}
 
 M.registered = {}
 

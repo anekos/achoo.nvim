@@ -1,9 +1,9 @@
-local M = {}
-
 local Fs = require('achoo.fs')
 local Session = require('achoo.session')
 local State = require('achoo.state')
 local Ui = require('achoo.ui')
+
+local M = {}
 
 PromptOptions = { prompt = 'Select session', format_item = Session.to_display }
 

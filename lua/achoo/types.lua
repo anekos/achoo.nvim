@@ -1,8 +1,8 @@
-local M = {}
-
 local Git = require('achoo.lib.git')
 local Path = require('achoo.lib.path')
 local State = require('achoo.state')
+
+local M = {}
 
 M.name = {
   make_keys = function(callback)

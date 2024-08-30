@@ -1,11 +1,11 @@
-local M = {}
-
 local Path = require('plenary.path')
-local Session = require('achoo.session')
-local Vim = require('achoo.lib.vim')
-local State = require('achoo.state')
 local Preprocess = require('achoo.preprocess')
+local Session = require('achoo.session')
+local State = require('achoo.state')
 local Validator = require('achoo.validator')
+local Vim = require('achoo.lib.vim')
+
+local M = {}
 
 local function get_base_directory()
   return Path:new(vim.fn.stdpath('data'), 'achoo', 'session')
