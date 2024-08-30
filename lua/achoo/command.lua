@@ -54,7 +54,7 @@ end
 
 function M.load(contextual)
   local function do_load()
-    vim.ui.select(get_sessions(contextual), PromptOptions, function(session)
+    Ui.select(get_sessions(contextual), PromptOptions, function(session)
       if session then
         Fs.load_session(session)
       end

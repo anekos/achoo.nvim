@@ -7,4 +7,17 @@ function M.confirm(prompt, callback)
   end
 end
 
+function M.select(candidates, options, on_select)
+  if #candidates == 0 then
+    return
+  end
+
+  if #candidates == 1 then
+    on_select(candidates[1])
+    return
+  end
+
+  vim.ui.select(candidates, options, on_select)
+end
+
 return M
