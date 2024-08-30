@@ -1,8 +1,8 @@
 local M = {}
 
 local function is_valid_buffer_type(buffer)
-  local allows = { '', 'terminal' }
-  -- local denies = { 'nofile' }
+  local allows = { '', 'help' , 'terminal' }
+  -- local denies = { 'acwrite', 'nofile', 'nowrite', 'prompt' , 'quickfix' }
   local buffer_type = vim.fn.getbufvar(buffer.bufnr, '&buftype')
   return vim.tbl_contains(allows, buffer_type)
 end
