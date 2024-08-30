@@ -1,3 +1,4 @@
+local assert = require('luassert')
 local Path = require('achoo.lib.path')
 
 describe('lib.path.relative_path', function()

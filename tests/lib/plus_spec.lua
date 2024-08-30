@@ -1,4 +1,5 @@
 local P = require('achoo.lib.plus')
+local assert = require('luassert')
 
 describe('lib.path.relative_path', function()
   local e = P.encode
