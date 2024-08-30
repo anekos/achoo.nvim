@@ -10,7 +10,7 @@ describe('lib.path.relative_path', function()
     assert.equals(e('foo%bar'), 'foo+25bar')
   end)
 
-  it('Edcode', function()
+  it('Decode', function()
     assert.equals(d('foo-bar'), 'foo-bar')
     assert.equals(d('foo+25bar'), 'foo%bar')
   end)
