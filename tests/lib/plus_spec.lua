@@ -14,5 +14,4 @@ describe('lib.path.relative_path', function()
     assert.equals(d('foo-bar'), 'foo-bar')
     assert.equals(d('foo+25bar'), 'foo%bar')
   end)
-
 end)
