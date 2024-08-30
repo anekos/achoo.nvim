@@ -27,10 +27,11 @@ local function define_command()
     nargs = 0,
   })
 
-  vim.api.nvim_create_user_command('AchooLoad', function(_)
-    Cmd.load()
+  vim.api.nvim_create_user_command('AchooLoad', function(opts)
+    Cmd.load(opts.bang)
   end, {
     nargs = 0,
+    bang = true,
   })
 
   vim.api.nvim_create_user_command('AchooAutoSave', function(opts)

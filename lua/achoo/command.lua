@@ -1,11 +1,39 @@
 local Fs = require('achoo.fs')
 local Session = require('achoo.session')
 local State = require('achoo.state')
+local Types = require('achoo.types')
 local Ui = require('achoo.ui')
 
 local M = {}
 
 PromptOptions = { prompt = 'Select session', format_item = Session.to_display }
+
+local function get_sessions(contextual)
+  local all_sessions = Fs.sessions()
+
+  if not contextual then
+    return all_sessions
+  end
+
+  local result = {}
+
+  for name, t in pairs(Types) do
+    if t.auto_keys then
+      local ok, keys = pcall(t.auto_keys)
+      local made = Session.make(name, keys)
+      if ok then
+        vim.list_extend(
+          result,
+          vim.tbl_filter(function(s)
+            return vim.deep_equal(s, made)
+          end, all_sessions)
+        )
+      end
+    end
+  end
+
+  return result
+end
 
 function M.delete(force)
   vim.ui.select(Fs.sessions(), PromptOptions, function(session)
@@ -24,9 +52,9 @@ function M.delete(force)
   end)
 end
 
-function M.load()
+function M.load(contextual)
   local function do_load()
-    vim.ui.select(Fs.sessions(), PromptOptions, function(session)
+    vim.ui.select(get_sessions(contextual), PromptOptions, function(session)
       if session then
         Fs.load_session(session)
       end
