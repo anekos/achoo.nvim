@@ -52,6 +52,24 @@ function M.delete(force)
   end)
 end
 
+function M.edit()
+  local function do_load()
+    Ui.select(get_sessions(false), PromptOptions, function(session)
+      if session then
+        vim.cmd.edit(Fs.make_filepath(session).filename)
+      end
+    end)
+  end
+
+  local ok, msg = pcall(do_load)
+  if not ok and State.auto_save then
+    State.auto_save = false
+    print(msg)
+    print(debug.traceback())
+    vim.notify('Failed to load session, auto save is disabled.')
+  end
+end
+
 function M.load(contextual)
   local function do_load()
     Ui.select(get_sessions(contextual), PromptOptions, function(session)

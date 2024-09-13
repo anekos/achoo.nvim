@@ -11,18 +11,18 @@ local function get_base_directory()
   return Path:new(vim.fn.stdpath('data'), 'achoo', 'session')
 end
 
-local function make_filepath(session)
+function M.make_filepath(session)
   local dir = get_base_directory()
   return Path:new(dir, Session.to_filename(session))
 end
 
 function M.session_exists(session)
-  local session_file = make_filepath(session)
+  local session_file = M.make_filepath(session)
   return vim.fn.filereadable(session_file.filename) == 1
 end
 
 function M.save_session(session, overwrite, on_leave)
-  local session_file = make_filepath(session)
+  local session_file = M.make_filepath(session)
 
   if not overwrite and session_file:exists() then
     vim.notify('Session already exists: ' .. Session.to_display(session), vim.log.levels.ERROR)
@@ -42,7 +42,7 @@ function M.save_session(session, overwrite, on_leave)
 end
 
 function M.load_session(session)
-  local session_file = make_filepath(session)
+  local session_file = M.make_filepath(session)
   if not session_file:exists() then
     vim.notify('Session not found: ' .. Session.to_display(session), vim.log.levels.ERROR)
     return
@@ -56,7 +56,7 @@ function M.load_session(session)
 end
 
 function M.delete_session(session)
-  local session_file = make_filepath(session)
+  local session_file = M.make_filepath(session)
   if not session_file:exists() then
     vim.notify('Session not found: ' .. Session.to_display(session), vim.log.levels.ERROR)
     return

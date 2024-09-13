@@ -43,6 +43,12 @@ local function define_command()
     end,
   })
 
+  vim.api.nvim_create_user_command('AchooEdit', function()
+    Cmd.edit()
+  end, {
+    nargs = 0,
+  })
+
   vim.api.nvim_create_user_command('AchooDelete', function(opts)
     Cmd.delete(opts.bang)
   end, {
