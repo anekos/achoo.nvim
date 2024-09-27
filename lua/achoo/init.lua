@@ -55,6 +55,13 @@ local function define_command()
     nargs = 0,
     bang = true,
   })
+
+  vim.api.nvim_create_user_command('AchooTest', function(opts)
+      Fs.rotate(State.session_rotation_prefix, State.session_rotation_limit)
+  end, {
+    nargs = 0,
+    bang = true,
+  })
 end
 
 local function define_auto_commands()
@@ -62,6 +69,9 @@ local function define_auto_commands()
     pattern = { '*' },
     callback = function()
       if State.last_session == nil or not State.auto_save then
+        if State.session_rotation then
+          Fs.rotate(State.session_rotation_prefix, State.session_rotation_limit)
+        end
         return
       end
       if State.confirm_on_leave then
@@ -86,6 +96,9 @@ local function apply_config(opts)
   apply('confirm_on_leave')
   apply('icon')
   apply('preprocess')
+  apply('session_rotation')
+  apply('session_rotation_prefix')
+  apply('seeion_rotation_limit')
 end
 
 function M.setup(opts)

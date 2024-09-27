@@ -70,6 +70,30 @@ function M.delete_session(session)
   end
 end
 
+function M.rotate(prefix, limit)
+  local mk = function(i)
+    local s = Session.make_session('name', { prefix .. tostring(i) })
+    return s, M.make_filepath(s)
+  end
+
+  for i = limit - 1, 1, -1 do
+    local _, fn = mk(i)
+    if fn:exists() then
+      local _, to = mk(i + 1)
+      if to:exists() then
+        to:rm()
+      end
+      fn:rename { new_name = to.filename }
+    end
+  end
+
+  local first_session, first_fn = mk(1)
+  if first_fn:exists() then
+    first_fn:rm()
+  end
+  M.save_session(first_session)
+end
+
 function M.sessions()
   local dir = get_base_directory()
 

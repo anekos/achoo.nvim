@@ -5,7 +5,7 @@ local M = {}
 
 M.registered = {}
 
-local function make_session(session_type, keys)
+function M.make_session(session_type, keys)
   return { type = session_type, keys = keys }
 end
 
@@ -49,7 +49,7 @@ function M.make(session_type, keys)
   local st = get_type(session_type)
 
   if keys then
-    return make_session(session_type, keys)
+    return M.make_session(session_type, keys)
   end
 
   local auto_keys = st.auto_keys
@@ -58,14 +58,14 @@ function M.make(session_type, keys)
     return nil
   end
 
-  return make_session(session_type, auto_keys())
+  return M.make_session(session_type, auto_keys())
 end
 
 function M.make_async(session_type, callback)
   local st = get_type(session_type)
 
   st.make_keys(function(keys)
-    callback(make_session(session_type, keys))
+    callback(M.make_session(session_type, keys))
   end)
 end
 
@@ -82,7 +82,7 @@ function M.from_filename(filename)
     error('Unknown session type: ' .. session_type)
   end
 
-  return make_session(session_type, keys)
+  return M.make_session(session_type, keys)
 end
 
 function M.reflect(session)
