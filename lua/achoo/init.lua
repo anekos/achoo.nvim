@@ -55,13 +55,6 @@ local function define_command()
     nargs = 0,
     bang = true,
   })
-
-  vim.api.nvim_create_user_command('AchooTest', function(opts)
-      Fs.rotate(State.session_rotation_prefix, State.session_rotation_limit)
-  end, {
-    nargs = 0,
-    bang = true,
-  })
 end
 
 local function define_auto_commands()
