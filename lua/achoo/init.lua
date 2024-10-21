@@ -4,6 +4,7 @@ local Session = require('achoo.session')
 local State = require('achoo.state')
 local Types = require('achoo.types')
 local Ui = require('achoo.ui')
+local Vim = require('achoo.lib.vim')
 
 local M = {}
 
@@ -62,7 +63,7 @@ local function define_auto_commands()
     pattern = { '*' },
     callback = function()
       if State.last_session == nil or not State.auto_save then
-        if State.session_rotation then
+        if State.session_rotation and Vim.modified() then
           Fs.rotate(State.session_rotation_prefix, State.session_rotation_limit)
         end
         return
