@@ -13,7 +13,7 @@ local function get_type(session_type)
   local st = M.registered[session_type]
 
   if st == nil then
-    error('Unknown session type: ' .. session_type)
+    error('Unknown session type: ' .. tostring(session_type))
   end
 
   return st
