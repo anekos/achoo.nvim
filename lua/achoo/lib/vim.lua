@@ -15,7 +15,7 @@ function M.modified()
   end
 
   for _, b in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_get_option_value('modified', { buffer = b }) then
+    if vim.api.nvim_get_option_value('modified', { buf = b }) then
       return true
     end
   end
