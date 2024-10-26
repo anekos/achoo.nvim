@@ -1,3 +1,4 @@
+local Action = require('achoo.action')
 local Fs = require('achoo.fs')
 local Session = require('achoo.session')
 local State = require('achoo.state')
@@ -56,7 +57,7 @@ function M.edit()
   local function do_load()
     Ui.select(get_sessions(false), PromptOptions, function(session)
       if session then
-        vim.cmd.edit(Fs.make_filepath(session).filename)
+        Action.edit_session_file(session)
       end
     end)
   end

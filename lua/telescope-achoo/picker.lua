@@ -5,6 +5,7 @@ local pickers = require('telescope.pickers')
 local previewers = require('telescope.previewers')
 local state = require('telescope.actions.state')
 
+local Action = require('achoo.action')
 local Fs = require('achoo.fs')
 local Session = require('achoo.session')
 local Ui = require('achoo.ui')
@@ -29,6 +30,14 @@ local function delete_session(prompt_bufnr)
       Fs.delete_session(session)
     end)
   end)
+end
+
+local function make_action(prompt_bufnr, f)
+  return function()
+    actions.close(prompt_bufnr)
+    local selection = state.get_selected_entry()
+    return f(selection.value)
+  end
 end
 
 return function(opts)
@@ -76,6 +85,9 @@ return function(opts)
           local selection = state.get_selected_entry()
           Fs.load_session(selection.value)
         end)
+
+        map('i', '<C-e>', make_action(prompt_bufnr, Action.edit_session_file))
+        map('n', 'e', make_action(prompt_bufnr, Action.edit_session_file))
 
         map('i', '<C-d>', function()
           delete_session(prompt_bufnr)
