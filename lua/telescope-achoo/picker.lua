@@ -15,11 +15,20 @@ local function extract_files(lines)
 
   for _, line in ipairs(lines) do
     if line:match('^badd') then
-      table.insert(buffers, vim.fn.substitute(line, [[^badd +\+[0-9]\+]], '', ''))
+      table.insert(buffers, vim.fn.substitute(line, [[^badd +\+[0-9]\+ \+]], '', ''))
     end
   end
 
   return buffers
+end
+
+local function extract_working_directory(lines)
+  for _, line in ipairs(lines) do
+    if line:match('^cd ') then
+      return vim.fn.substitute(line, [[^cd *]], '', '')
+    end
+  end
+  return nil
 end
 
 local function delete_session(prompt_bufnr)
@@ -30,6 +39,10 @@ local function delete_session(prompt_bufnr)
       Fs.delete_session(session)
     end)
   end)
+end
+
+local function indent(s)
+  return '  ' .. s
 end
 
 local function make_action(prompt_bufnr, f)
@@ -67,7 +80,13 @@ return function(opts)
       local lines = {}
 
       local content = vim.fn.readfile(filepath)
-      vim.list_extend(lines, vim.fn.sort(extract_files(content)))
+      local working_directory = extract_working_directory(content)
+      if working_directory then
+        table.insert(lines, 'Directory:')
+        table.insert(lines, indent(working_directory))
+      end
+      table.insert(lines, 'Files:')
+      vim.list_extend(lines, vim.tbl_map(indent, vim.fn.sort(extract_files(content))))
 
       vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
     end,
